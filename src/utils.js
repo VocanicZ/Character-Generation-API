@@ -2,6 +2,7 @@
 const fs = require("fs");
 const BigNumber = require("bignumber.js");
 const { sha3_256 } = require("js-sha3");
+const crypto = require("crypto");
 
 // Re-roll stats
 const reroll = (character) => {
@@ -368,6 +369,15 @@ const getPronouns = (character) => {
   }
 };
 
+const hexBytesToSHA256 = (hexString) => {
+  const cleanHex = hexString.replace(/[^0-9a-fA-F]/g, '');
+  const buffer = Buffer.from(cleanHex, 'hex');
+
+  const hash = crypto.createHash('sha256');
+  hash.update(buffer);
+  return hash.digest('hex');
+}
+
 module.exports = {
   reroll,
   writeCharacter,
@@ -383,4 +393,5 @@ module.exports = {
   getBackgroundColor,
   getBackgroundStory,
   getAbilityModifier,
+  hexBytesToSHA256,
 };

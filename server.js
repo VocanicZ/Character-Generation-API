@@ -2,9 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const fetch = require("node-fetch");
-const crypto = require("crypto");
 
 // Code File Imports
+const utils = require("./src/utils");
 const generator = require("./src/v1/generate-v1");
 const metadata = require("./src/metadata");
 
@@ -22,19 +22,10 @@ app.use(function (req, res, next) {
   next();
 });
 
-async function hexBytesToSHA256(hexString) {
-  const cleanHex = hexString.replace(/[^0-9a-fA-F]/g, '');
-  const buffer = Buffer.from(cleanHex, 'hex');
-
-  const hash = crypto.createHash('sha256');
-  hash.update(buffer);
-  return hash.digest('hex');
-}
-
 async function getRandomSeed() {
   const response = await fetch("https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h");
   const hexString = await response.text();
-  const seed = await hexBytesToSHA256(hexString);
+  const seed = utils.hexBytesToSHA256(hexString);
   return seed;
 }
 
