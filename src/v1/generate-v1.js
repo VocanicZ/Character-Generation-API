@@ -2,19 +2,18 @@
 // Code File Imports
 const utils = require("../utils");
 const { sha3_256 } = require("js-sha3");
-const draw_v1 = require("./draw-v1");
 
 // Asset Imports
-const bowsInfo = require("../../assets/v1-art/weapons/bows.json");
-const staffsInfo = require("../../assets/v1-art/weapons/staffs.json");
-const daggersInfo = require("../../assets/v1-art/weapons/daggers.json");
-const swordsInfo = require("../../assets/v1-art/weapons/swords.json");
-const chestInfo = require("../../assets/v1-art/shirts/chest.json");
-const legInfo = require("../../assets/v1-art/legs/leg.json");
-const bodyInfo = require("../../assets/v1-art/body/body.json");
-const eyeInfo = require("../../assets/v1-art/eyes/eye.json");
-const hairInfo = require("../../assets/v1-art/hair/hair.json");
-const facialHairInfo = require("../../assets/v1-art/facial-hair/facial-hair.json");
+const bowsInfo = require("../../assets/v1/weapons/bows.json");
+const staffsInfo = require("../../assets/v1/weapons/staffs.json");
+const daggersInfo = require("../../assets/v1/weapons/daggers.json");
+const swordsInfo = require("../../assets/v1/weapons/swords.json");
+const chestInfo = require("../../assets/v1/shirts/chest.json");
+const legInfo = require("../../assets/v1/legs/leg.json");
+const bodyInfo = require("../../assets/v1/body/body.json");
+const eyeInfo = require("../../assets/v1/eyes/eye.json");
+const hairInfo = require("../../assets/v1/hair/hair.json");
+const facialHairInfo = require("../../assets/v1/facial-hair/facial-hair.json");
 const maleFirstNames = require("../../assets/attributes/firstNameMale.json");
 const femaleFirstNames = require("../../assets/attributes/firstNameFemale.json");
 const lastNames = require("../../assets/attributes/LastName.json");
@@ -119,9 +118,6 @@ const generateRandom = async (seed) => {
     height: height,
     background: backgroundInfo[utils.rand(lastRand, backgroundInfo)],
     description: "",
-    image_url: "",
-    sprite_url: "",
-    weapon_url: "",
     seed: seed,
   };
 
@@ -132,20 +128,9 @@ const generateRandom = async (seed) => {
   characterData.wisModifier = utils.getAbilityModifier(characterData.wis);
   characterData.chaModifier = utils.getAbilityModifier(characterData.cha);
 
-  characterData.description = utils.getBackgroundStory(lastRand, characterData);
+  characterData.description = utils.getBackgroundStory(lastRand, characterData)
 
   /*
-
-  const image_URL = await draw_v1.getTokenURL(1, characterData);
-  characterData.image_url = image_URL;
-
-  const sprite_URL = await draw_v1.getSpriteURL(1, characterData);
-  characterData.sprite_url = sprite_URL;
-
-  const weapon_URL = await draw_v1.getWeaponURL(1, characterData);
-  characterData.weapon_url = weapon_URL;
-  */
-
   console.log(
     "Seed: " + seed + "\n",
     "Name: " + characterData.name + "\n",
@@ -154,178 +139,10 @@ const generateRandom = async (seed) => {
     "Class: " + characterData.class + "\n",
     "Height: " + characterData.height + "\n"
   );
+  */
 
   return characterData;
 };
-
-// Generate Pre-made Character
-const generateCharacter = async (id) => {
-  // Hash the seed with the SHA256 Algorithm
-  let lastRand = {
-    v: sha3_256(id).slice(-64),
-  };
-
-  const character = specialCharacters[id];
-
-  var classVal = classes[character.class];
-  var height = character.height + "cm (" + utils.toFeet(character.height) + ")";
-  // Weapon Selection
-  if (classVal === "Ranger") {
-    var weapon = bowsInfo[character.weapon];
-  } else if (classVal === "Rogue") {
-    var weapon = daggersInfo[character.weapon];
-  } else if (classVal === "Wizard" || classVal == "Cleric") {
-    var weapon = staffsInfo[character.weapon];
-  } else if (classVal === "Knight" || classVal == "Barbarian") {
-    var weapon = swordsInfo[character.weapon];
-  }
-  weapon.modifier = character.modifier;
-
-  var ac =
-    10 +
-    chestInfo[character.chest].armor +
-    legInfo[character.legs].armor +
-    hairInfo[character.hair].armor;
-
-  // Write Character Data
-  var characterData = {
-    body: bodyInfo[character.body],
-    eyes: eyeInfo[character.eyes],
-    hair: hairInfo[character.hair],
-    chest: chestInfo[character.chest],
-    legs: legInfo[character.legs],
-    facialHair: facialHairInfo[character.facialHair],
-    weapon: weapon,
-    hp: character.hp,
-    ac: ac,
-    str: character.str,
-    strModifier: utils.getAbilityModifier(character.str),
-    dex: character.dex,
-    dexModifier: utils.getAbilityModifier(character.dex),
-    con: character.con,
-    conModifier: utils.getAbilityModifier(character.con),
-    int: character.int,
-    intModifier: utils.getAbilityModifier(character.int),
-    wis: character.wis,
-    wisModifier: utils.getAbilityModifier(character.wis),
-    cha: character.cha,
-    chaModifier: utils.getAbilityModifier(character.cha),
-    statModifier: character.statModifier,
-    statModifierValue: character.statModifierValue,
-    coins: character.coins,
-    name: character.name,
-    sex: sex[character.sex],
-    race: bodyInfo[character.body].race,
-    class: classVal,
-    height: height,
-    background: backgroundInfo[character.background],
-    description: "",
-    image_url: "",
-    sprite_url: "",
-    weapon_url: "",
-    seed: id,
-  };
-
-  characterData.description = utils.getBackgroundStory(lastRand, characterData);
-
-  const image_URL = await draw_v1.getTokenURL(1, characterData);
-  characterData.image_url = image_URL;
-
-  const sprite_URL = await draw_v1.getSpriteURL(1, characterData);
-  characterData.sprite_url = sprite_URL;
-
-  const weapon_URL = await draw_v1.getWeaponURL(1, characterData);
-  characterData.weapon_url = weapon_URL;
-
-  return characterData;
-};
-
-const specialCharacters = [
-  {
-    // Thaer Thistlegrove
-    body: 18,
-    eyes: 0,
-    hair: 5,
-    chest: 0,
-    legs: 0,
-    facialHair: 0,
-    weapon: 11,
-    modifier: 5,
-    hp: 28,
-    ac: 10,
-    str: 20,
-    dex: 20,
-    con: 20,
-    int: 20,
-    wis: 20,
-    cha: 20,
-    statModifier: "DEX",
-    statModifierValue: 5,
-    coins: 1000,
-    name: "Thaer Thistlegrove",
-    sex: 0,
-    race: 0,
-    class: 2,
-    height: 185,
-    background: 5,
-  },
-  {
-    // Goblin Slayer
-    body: 3,
-    eyes: 3, // make black eye
-    hair: 0,
-    chest: 1,
-    legs: 1,
-    facialHair: 0,
-    weapon: 0,
-    modifier: 5,
-    hp: 30,
-    ac: 10,
-    str: 20,
-    dex: 20,
-    con: 20,
-    int: 20,
-    wis: 20,
-    cha: 20,
-    statModifier: "STR",
-    statModifierValue: 5,
-    coins: 1000,
-    name: "Orcbolg/BeardCutter",
-    sex: 0,
-    race: 0,
-    class: 1,
-    height: 195,
-    background: 5,
-  },
-  {
-    // Sesh Gremlin
-    body: 11,
-    eyes: 9,
-    hair: 1,
-    chest: 2,
-    legs: 2,
-    facialHair: 0,
-    weapon: 0,
-    modifier: 5,
-    hp: 26,
-    ac: 10,
-    str: 20,
-    dex: 20,
-    con: 20,
-    int: 20,
-    wis: 20,
-    cha: 20,
-    statModifier: "WIS",
-    statModifierValue: 5,
-    coins: 420,
-    name: "Sesh Gremlin",
-    sex: 0,
-    race: 0,
-    class: 4,
-    height: 170,
-    background: 5,
-  },
-];
 
 // ******************************************//
 // Generate Methods for Creatures/ Enemies
@@ -424,9 +241,6 @@ const generateRandomCreature = async (seed) => {
     height: height,
     background: backgroundInfo[utils.rand(lastRand, backgroundInfo)],
     description: "",
-    image_url: "",
-    sprite_url: "",
-    weapon_url: "",
     seed: seed,
   };
 
@@ -439,21 +253,11 @@ const generateRandomCreature = async (seed) => {
 
   creatureData.description = utils.getBackgroundStory(lastRand, creatureData);
 
-  const image_URL = await draw_v1.getTokenURL(1, creatureData);
-  creatureData.image_url = image_URL;
-
-  const sprite_URL = await draw_v1.getSpriteURL(1, creatureData);
-  creatureData.sprite_url = sprite_URL;
-
-  const weapon_URL = await draw_v1.getWeaponURL(1, creatureData);
-  creatureData.weapon_url = weapon_URL;
-
   return creatureData;
 };
 
 // Exports
 module.exports = {
   generateRandom,
-  generateCharacter,
-  specialCharacters,
+  generateRandomCreature
 };
