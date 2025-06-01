@@ -1,10 +1,9 @@
-// *********************************** //
-// Node Module Imports
-// *********************************** //
-
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const fetch = require("node-fetch");
+const crypto = require("crypto");
+
 const { registerFont } = require("canvas");
 registerFont(__dirname + "/assets/Press_Start_2P/PressStart2P-Regular.ttf", {
   family: "Press Start 2P",
@@ -14,8 +13,6 @@ registerFont(__dirname + "/assets/Press_Start_2P/PressStart2P-Regular.ttf", {
 // Code File Imports
 const generator = require("./src/v1/generate-v1");
 const metadata = require("./src/metadata");
-const draw = require("./src/v1/draw-v1");
-const characters = require("./src/v1/characters.json");
 
 // API Server Info
 const app = express();
@@ -34,216 +31,32 @@ app.use(function (req, res, next) {
 // Link CSS and script files
 app.use("/", express.static(__dirname + "/assets/"));
 
-// *********************************** //
-// Home URL
-// *********************************** //
-
 app.get(`/`, (req, res) => {
   res.sendFile(path.join(__dirname, "/README.html"));
 });
 
-// *********************************** //
-// Version 1 Routes
-// *********************************** //
+async function hexBytesToSHA256(hexString) {
+  const cleanHex = hexString.replace(/[^0-9a-fA-F]/g, '');
+  const buffer = Buffer.from(cleanHex, 'hex');
 
-// Get Character by ID
-app.get(`/v1/:id([0-9]+)/:scale([0-9]+)x.png`, async (req, res) => {
-  const id = parseInt(req.params.id);
-  const scale = parseInt(req.params.scale);
-  if (scale > 0 && scale <= 5) {
-    getDGC(id, async (info) => {
-      if (info.error) {
-        res.status(404).json("Not Found");
-      } else {
-        res.type("png");
-        const stream = await draw.drawCharacterStream(
-          scale,
-          await generator.generateRandom(info.seed)
-        );
-        stream.pipe(res);
-      }
-    });
-  } else {
-    res.status(404).json("Not Found");
+  const hash = crypto.createHash('sha256');
+  hash.update(buffer);
+  return hash.digest('hex');
+}
+
+app.get(`/v2/metadata`, async (req, res) => {
+  try {
+    const response = await fetch("https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h");
+    const hexString = await response.text();
+    // Step 2: Convert to SHA-256
+    const seed = await hexBytesToSHA256(hexString);
+    res.header("Content-Type", "application/json");
+    res.send(metadata.getMetadata(0, await generator.generateRandom(seed)));
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    res.status(500).send({ error: "Internal Server Error" });
   }
 });
-
-// Draw Preset Character Card
-app.get(`/v1/special/:id([0-9]+)/:scale([0-9]+)x.png`, async (req, res) => {
-  const id = req.params.id;
-  const scale = req.params.scale;
-  const character = characters[id];
-  if (scale > 0 && scale <= 5) {
-    res.type("png");
-    const stream = await draw.drawCharacterStream(scale, character);
-    stream.pipe(res);
-  } else {
-    res.status(404).json("Not Found");
-  }
-});
-
-// Get Special Character Metadata
-app.get(`/v1/special/:id([0-9]+)/metadata`, async (req, res) => {
-  const seed = req.params.id;
-  res.header("Content-Type", "application/json");
-  res.send(metadata.getMetadata(0, await generator.generateCharacter(seed)));
-});
-
-// Draw Character Card Based on Seed
-app.get(
-  `/v1/card/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 5) {
-      res.type("png");
-      const stream = await draw.drawCharacterStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// Draw Full Character Card Based on Seed
-app.get(
-  `/v1/fullcard/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 5) {
-      res.type("png");
-      const stream = await draw.drawCharacterCardFullStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// Get Character Metadata Based on Seed
-app.get(`/v1/seed/:seed([a-zA-Z0-9]+)/metadata`, async (req, res) => {
-  const seed = req.params.seed;
-  res.header("Content-Type", "application/json");
-  res.send(metadata.getMetadata(0, await generator.generateRandom(seed)));
-});
-
-// Draw Sprite only of character
-app.get(
-  `/v1/special/sprite/:id([0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const id = parseInt(req.params.id);
-    const scale = parseInt(req.params.scale);
-    if (scale > 0 && scale <= 25) {
-      getDGC(id, async (info) => {
-        if (info.error) {
-          res.status(404).json("Not Found");
-        } else {
-          res.type("png");
-          const stream = await draw.drawSpriteStream(
-            scale,
-            await generator.generateRandom(info.seed)
-          );
-          stream.pipe(res);
-        }
-      });
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// Draw Character Sprite Based on Seed
-app.get(
-  `/v1/sprite/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 25) {
-      res.type("png");
-      const stream = await draw.drawSpriteStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// Draw Sprite only of Weapon
-app.get(
-  `/v1/special/weapon/:id([0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const id = parseInt(req.params.id);
-    const scale = parseInt(req.params.scale);
-    if (scale > 0 && scale <= 25) {
-      getDGC(id, async (info) => {
-        if (info.error) {
-          res.status(404).json("Not Found");
-        } else {
-          res.type("png");
-          const stream = await draw.drawWeaponStream(
-            scale,
-            await generator.generateRandom(info.seed)
-          );
-          stream.pipe(res);
-        }
-      });
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// Draw Weapon Sprite Based on Seed
-app.get(
-  `/v1/weapon/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 25) {
-      res.type("png");
-      const stream = await draw.drawWeaponStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// *********************************** //
-// Version 2 Routes
-// *********************************** //
-
-// Draw Character Card Based on Seed
-app.get(
-  `/v2/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 5) {
-      res.type("png");
-      const stream = await draw.drawCharacterStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
 
 // Get Character Metadata Based on Seed
 app.get(`/v2/seed/:seed([a-zA-Z0-9]+)/metadata`, async (req, res) => {
@@ -251,44 +64,6 @@ app.get(`/v2/seed/:seed([a-zA-Z0-9]+)/metadata`, async (req, res) => {
   res.header("Content-Type", "application/json");
   res.send(metadata.getMetadata(0, await generator.generateRandom(seed)));
 });
-
-// Draw Character Sprite Based on Seed
-app.get(
-  `/v2/sprite/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 25) {
-      res.type("png");
-      const stream = await draw.drawSpriteStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
-
-// Draw Weapon Sprite Based on Seed
-app.get(
-  `/v2/weapon/seed/:seed([a-zA-Z0-9]+)/:scale([0-9]+)x.png`,
-  async (req, res) => {
-    const seed = req.params.seed;
-    const scale = req.params.scale;
-    if (scale > 0 && scale <= 25) {
-      res.type("png");
-      const stream = await draw.drawWeaponStream(
-        scale,
-        await generator.generateRandom(seed)
-      );
-      stream.pipe(res);
-    } else {
-      res.status(404).json("Not Found");
-    }
-  }
-);
 
 // Server Listen
 app.listen(port, () => {

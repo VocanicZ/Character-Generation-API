@@ -134,6 +134,8 @@ const generateRandom = async (seed) => {
 
   characterData.description = utils.getBackgroundStory(lastRand, characterData);
 
+  /*
+
   const image_URL = await draw_v1.getTokenURL(1, characterData);
   characterData.image_url = image_URL;
 
@@ -142,6 +144,7 @@ const generateRandom = async (seed) => {
 
   const weapon_URL = await draw_v1.getWeaponURL(1, characterData);
   characterData.weapon_url = weapon_URL;
+  */
 
   console.log(
     "Seed: " + seed + "\n",
@@ -159,7 +162,7 @@ const generateRandom = async (seed) => {
 const generateCharacter = async (id) => {
   // Hash the seed with the SHA256 Algorithm
   let lastRand = {
-    v: sha3_256(seed).slice(-64),
+    v: sha3_256(id).slice(-64),
   };
 
   const character = specialCharacters[id];
