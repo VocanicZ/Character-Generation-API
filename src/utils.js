@@ -378,6 +378,12 @@ const hexBytesToSHA256 = (hexString) => {
   return hash.digest('hex');
 }
 
+const sum = (arr) => {
+   return arr.reduce(function (a, b) {
+      return a + b;
+   }, 0);
+}
+
 module.exports = {
   reroll,
   writeCharacter,
@@ -394,4 +400,5 @@ module.exports = {
   getBackgroundStory,
   getAbilityModifier,
   hexBytesToSHA256,
+  sum,
 };

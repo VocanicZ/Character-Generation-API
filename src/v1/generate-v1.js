@@ -81,36 +81,17 @@ const generateRandom = async (seed) => {
 
   var ac = 10 + chest.armor + leg.armor + hair.armor;
 
+  /*
   const stats = ["STR ", "DEX ", "CON ", "INT ", "WIS ", "CHA "];
   var statMod = stats[Math.floor(utils.getRand(lastRand, 0, stats.length))];
   var statModVal = Math.floor(utils.getRand(lastRand, 1, 5));
+  */
+
+  var buff = -1 // todo blessing & curse buff
 
   // Write Character Data
   var characterData = {
-    body: body,
-    eyes: eyeInfo[utils.rand(lastRand, eyeInfo)],
-    hair: hair,
-    chest: chest,
-    legs: leg,
-    facialHair: facialHair,
-    weapon: weapon,
-    hp: utils.getHP(classVal, con, lastRand),
-    ac: ac,
-    str: utils.rollStat(lastRand),
-    strModifier: "",
-    dex: utils.rollStat(lastRand),
-    dexModifier: "",
-    con: con,
-    conModifier: "",
-    int: utils.rollStat(lastRand),
-    intModifier: "",
-    wis: utils.rollStat(lastRand),
-    wisModifier: "",
-    cha: utils.rollStat(lastRand),
-    chaModifier: "",
-    statModifier: statMod,
-    statModifierValue: statModVal,
-    coins: Math.floor(utils.getRand(lastRand, 0, 1000)),
+    seed: seed,
     name: name,
     sex: sexVal,
     race: body.race, // race
@@ -118,15 +99,87 @@ const generateRandom = async (seed) => {
     height: height,
     background: backgroundInfo[utils.rand(lastRand, backgroundInfo)],
     description: "",
-    seed: seed,
+    body: body,
+    eyes: eyeInfo[utils.rand(lastRand, eyeInfo)],
+    hair: hair,
+    chest: chest,
+    legs: leg,
+    facialHair: facialHair,
+    coins: Math.floor(utils.getRand(lastRand, 0, 1000)),
+    weapon: weapon,
+    hp: utils.getHP(classVal, con, lastRand),
+    ac: ac,
+    buff: buff,
+    stats: {
+      total: 0,
+      str: 0,
+      dex: 0,
+      con: 0,
+      int: 0,
+      wis: 0,
+      cha: 0,
+      base: {
+        total: 0,
+        str: utils.rollStat(lastRand),
+        dex: utils.rollStat(lastRand),
+        con: utils.rollStat(lastRand),
+        int: utils.rollStat(lastRand),
+        wis: utils.rollStat(lastRand),
+        cha: utils.rollStat(lastRand),
+      },
+      modifier: {
+        total: "",/*
+        statModifier: statMod,
+        statModifierValue: statModVal,*/
+        str: "",
+        dex: "",
+        con: "",
+        int: "",
+        wis: "",
+        cha: "",
+      },
+      gear: {
+        total: 0,
+        str: 0,
+        dex: 0,
+        con: 0,
+        int: 0,
+        wis: 0,
+        cha: 0,
+      },
+      buff: {
+        total: 0,
+        str: 0,
+        dex: 0,
+        con: 0,
+        int: 0,
+        wis: 0,
+        cha: 0,
+      }
+    },
   };
 
-  characterData.strModifier = utils.getAbilityModifier(characterData.str);
-  characterData.dexModifier = utils.getAbilityModifier(characterData.dex);
-  characterData.conModifier = utils.getAbilityModifier(characterData.con);
-  characterData.intModifier = utils.getAbilityModifier(characterData.int);
-  characterData.wisModifier = utils.getAbilityModifier(characterData.wis);
-  characterData.chaModifier = utils.getAbilityModifier(characterData.cha);
+  characterData.stats.base.total = utils.sum([
+    characterData.stats.base.str,
+    characterData.stats.base.dex,
+    characterData.stats.base.con,
+    characterData.stats.base.int,
+    characterData.stats.base.wis,
+    characterData.stats.base.cha
+  ]);
+
+  characterData.stats.modifier.str = utils.getAbilityModifier(characterData.stats.base.str);
+  characterData.stats.modifier.dex = utils.getAbilityModifier(characterData.stats.base.dex);
+  characterData.stats.modifier.con = utils.getAbilityModifier(characterData.stats.base.con);
+  characterData.stats.modifier.int = utils.getAbilityModifier(characterData.stats.base.int);
+  characterData.stats.modifier.wis = utils.getAbilityModifier(characterData.stats.base.wis);
+  characterData.stats.modifier.cha = utils.getAbilityModifier(characterData.stats.base.cha);
+
+  characterData.stats.total = utils.sum([
+    characterData.stats.base.total,
+    characterData.stats.gear.total,
+    characterData.stats.buff.total
+  ])
 
   characterData.description = utils.getBackgroundStory(lastRand, characterData)
 
