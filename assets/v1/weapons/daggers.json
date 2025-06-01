@@ -1,0 +1,71 @@
+[
+    {
+        "type": "Dagger",
+		"elemental": "Curse",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Blood",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Blood",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Blood",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Curse",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Curse",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Curse",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+    {
+        "type": "Dagger",
+		"elemental": "Curse",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },    {
+        "type": "Dagger",
+		"elemental": "Blood",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    },
+	{
+        "type": "Dagger",
+		"elemental": "Blood",
+		"damage": "d6",
+		"modifier": 0,
+		"chance": 100
+    }
+]

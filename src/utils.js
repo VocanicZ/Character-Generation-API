@@ -379,9 +379,28 @@ const hexBytesToSHA256 = (hexString) => {
 }
 
 const sum = (arr) => {
+  return 0;
+}
+
+const sumNum = (arr) => {
    return arr.reduce(function (a, b) {
       return a + b;
    }, 0);
+}
+
+const sumStr = (arr) => {
+  return arr.reduce(function(a, b) {
+    const signA = a[0];
+    const signB = b[0];
+    const numA = parseInt(a.slice(1), 10) * (signA === '+' ? 1 : -1);
+    const numB = parseInt(b.slice(1), 10) * (signB === '+' ? 1 : -1);
+
+    const result = numA + numB;
+    const sign = result >= 0 ? '+' : '-';
+  
+    return sign + Math.abs(result);
+  }
+  );
 }
 
 module.exports = {
@@ -401,4 +420,6 @@ module.exports = {
   getAbilityModifier,
   hexBytesToSHA256,
   sum,
+  sumNum,
+  sumStr,
 };

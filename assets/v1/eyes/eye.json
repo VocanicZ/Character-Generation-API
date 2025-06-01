@@ -1,0 +1,34 @@
+[
+	{
+		"name": "Light Blue",
+		"chance": 100
+	},
+    {
+		"name": "Light Green",
+		"chance": 100
+	},
+    {
+		"name": "Light Green",
+		"chance": 100
+	},
+    {
+		"name": "Red",
+		"chance": 100
+	},
+	{
+		"name": "Blue",
+		"chance": 100
+	},
+	{
+		"name": "Purple",
+		"chance": 100
+	},
+	{
+		"name": "Green",
+		"chance": 100
+	},
+	{
+		"name": "White",
+		"chance": 100
+	}
+]

@@ -5,7 +5,7 @@ const fetch = require("node-fetch");
 
 // Code File Imports
 const utils = require("./src/utils");
-const generator = require("./src/v1/generate-v1");
+const generator = require("./src/v1/generate");
 const metadata = require("./src/metadata");
 
 // API Server Info
