@@ -1,8 +1,100 @@
 [
-    "Barbarian",
-    "Knight",
-    "Ranger",
-    "Rogue",
-    "Wizard",
-    "Cleric"
+    {
+        "human": {
+            "common": [
+                {
+                    "class": "knight",
+                    "name": "Knight",
+                    "chance": 2,
+                    "proficiencies": {
+                        "armor": [
+                            "medium",
+                            "heavy",
+                            "shield"
+                        ],
+                        "weapon": [
+                            "simple_weapon",
+                            "martial_weapon"
+                        ],
+                        "saving_throw": [
+                            "str",
+                            "con"
+                        ],
+                        "skills": {
+                            "free": 2,
+                            "choices": [
+                                "animal_handling",
+                                "athletics",
+                                "history",
+                                "insight",
+                                "intimidation", 
+                                "performance", 
+                                "persuasion",
+                                "religion"
+                            ]
+                        },
+                        "stats": {
+                            "hp": {
+                                "base": 10,
+                                "increase_per_level": {
+                                    "roll": 1,
+                                    "min": 1,
+                                    "max": 10,
+                                    "multiplier": 1
+                                }
+                            }
+                        },
+                        "equipments": {
+                            "headgear_upper": "",
+                            "headgear_middle": "",
+                            "headgear_lower": "",
+                            "armor": [
+                                {
+                                    "armor": "chain_mail",
+                                    "chance": 50
+                                },
+                                {
+                                    "armor": "half_plate",
+                                    "chance": 50
+                                }
+                            ],
+                            "garment": "",
+                            "hand_left": "shield",
+                            "hand_right": "long_sword",
+                            "accessory_1": "",
+                            "accessory_2": ""
+                        },
+                        "inventory": {
+                            "guarantee": {
+                                "explorer_pack": 1
+                            },
+                            "roll": [
+                                [
+                                    {
+                                        "chance": 50,
+                                        "container": {
+                                            "lance": 1
+                                        }
+                                    },
+                                    {
+                                        "chance": 50,
+                                        "container": {
+                                            "crossbow": 1,
+                                            "bolt": 20
+                                        }
+                                    }
+                                ]
+                            ]
+                        },
+                        "money": {
+                            "roll": 5,
+                            "min": 1,
+                            "max": 6,
+                            "multiplier": 5
+                        }
+                    }
+                }
+            ]
+        }
+    }
 ]
