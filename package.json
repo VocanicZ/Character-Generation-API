@@ -13,9 +13,13 @@
   "author": "ITsPorky",
   "license": "ISC",
   "dependencies": {
+    "@stdlib/datasets-female-first-names-en": "^0.2.2",
+    "@stdlib/datasets-male-first-names-en": "^0.2.2",
+    "aes256": "^1.1.0",
     "bignumber.js": "^9.0.1",
     "canvas": "^2.8.0",
     "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "js-sha256": "^0.9.0",

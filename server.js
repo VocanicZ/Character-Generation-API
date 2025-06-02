@@ -22,27 +22,50 @@ app.use(function (req, res, next) {
   next();
 });
 
-async function getRandomSeed() {
-  const response = await fetch("https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h");
-  const hexString = await response.text();
-  const seed = utils.hexBytesToSHA256(hexString);
-  return seed;
-}
+app.get(`/test`, async (req, res) => {
+  const result = await generator.test();
+  res.header("Content-Type", "application/json");
+  res.send(metadata.getMetadata(0, result));
+});
 
 // Get random Character Metadata
 app.get(`/random/metadata`, async (req, res) => {
   res.header("Content-Type", "application/json");
-  res.send(metadata.getMetadata(0, await generator.generateRandom(await getRandomSeed())));
+  const cha = await generator.generateRandom();
+  if (cha) {
+    res.send(metadata.getMetadata(0, cha));
+  }
+  else {
+    res.status(400).send('invalid seed')
+  }
+});
+
+app.get(`/random-family/:family([a-zA-Z0-9]+)/metadata`, async (req, res) => {
+  var family = req.params.family;
+  res.header("Content-Type", "application/json");
+  const cha = await generator.generateRandom('', family);
+  if (cha) {
+    res.send(metadata.getMetadata(0, cha));
+  }
+  else {
+    res.status(400).send('invalid seed')
+  }
 });
 
 // Get Character Metadata Based on Seed
 app.get(`/seed/:seed([a-zA-Z0-9]+)/metadata`, async (req, res) => {
   var seed = req.params.seed;
   if (seed == "random") {
-    seed = await getRandomSeed();
+    seed = '';
   }
   res.header("Content-Type", "application/json");
-  res.send(metadata.getMetadata(0, await generator.generateRandom(seed)));
+  const cha = await generator.generateRandom(seed);
+  if (cha) {
+    res.send(metadata.getMetadata(0, cha));
+  }
+  else {
+    res.status(400).send('invalid seed')
+  }
 });
 
 // Server Listen

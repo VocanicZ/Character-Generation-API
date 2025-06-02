@@ -1,0 +1,50 @@
+[
+    {
+        "rarity": "Common",
+        "rate": "90%",
+        "statsmod": 0,
+		"chance": 10000000
+    },
+    {
+        "rarity": "Uncommon",
+        "rate": "9%",
+        "statsmod": 1,
+		"chance": 1000000
+    },
+    {
+        "rarity": "Rare",
+        "rate": "0.9%",
+        "statsmod": 2,
+		"chance": 100000
+    },
+    {
+        "rarity": "Super Rare (0.09%)",
+        "rate": "0.09%",
+        "statsmod": 3,
+		"chance": 10000
+    },
+    {
+        "rarity": "Super Super Rare",
+        "rate": "0.009%",
+        "statsmod": 4,
+		"chance": 1000
+    },
+    {
+        "rarity": "Hyper Rare",
+        "rate": "0.0009%",
+        "statsmod": 5,
+		"chance": 100
+    },
+    {
+        "rarity": "Legendary Rare",
+        "rate": "0.00009%",
+        "statsmod": 6,
+		"chance": 10
+    },
+    {
+        "rarity": "Ultra Rare",
+        "rate": "0.000009%",
+        "statsmod": 7,
+		"chance": 1
+    }
+]

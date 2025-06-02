@@ -49,9 +49,10 @@ const rand = (lastRand, info) => {
   return i;
 };
 
-const getRand = (lastRand, min = 0, max = 1) => {
-  // lastRand.v = web3.utils.sha3(lastRand.v).slice(-64);
-  lastRand.v = sha3_256(lastRand.v).slice(-64);
+const getRand = (lastRand, min = 0, max = 1, hashNext = true) => {
+  if (hashNext) {
+    lastRand.v = sha3_256(lastRand.v).slice(-64);
+  }
   const rand = new BigNumber(lastRand.v, 16)
     .div(new BigNumber(2 ** 256))
     .toNumber();
@@ -61,7 +62,8 @@ const getRand = (lastRand, min = 0, max = 1) => {
 // Roll Stat (3d6 + 2)
 const rollStat = (seed) => {
   let roll = 0;
-  for (let i = 0; i < 3; i++) {
+  let round = seed.r.statsmod + 3;
+  for (let i = 0; i < round; i++) {
     roll += Math.floor(getRand(seed, 1, 7));
   }
   return (roll += 2);
@@ -182,43 +184,44 @@ const getBackgroundColor = (character) => {
   }
 };
 
-const getAbilityModifier = (abilityScore) => {
-  const value = abilityScore; // Math.floor((abilityScore - 10) / 2)
-  switch (true) {
-    case value === 1:
-      return "-5";
-    case value <= 3:
-      return "-4";
-    case value <= 5:
-      return "-3";
-    case value <= 7:
-      return "-2";
-    case value <= 9:
-      return "-1";
-    case value <= 11:
-      return "+0";
-    case value <= 13:
-      return "+1";
-    case value <= 15:
-      return "+2";
-    case value <= 17:
-      return "+3";
-    case value <= 19:
-      return "+4";
-    case value <= 21:
-      return "+5";
-    case value <= 23:
-      return "+6";
-    case value <= 25:
-      return "+7";
-    case value <= 27:
-      return "+8";
-    case value <= 29:
-      return "+9";
-    case value === 30:
-      return "+10";
+const getAbilityModifier = (lastRand, abilityScore) => {
+const value = abilityScore / 2;
+let mod = lastRand.r.statsmod;
+switch (true) {
+  case value <= 1:
+    return mod + -5;
+  case value <= 3:
+    return mod + -4;
+  case value <= 5:
+    return mod + -3;
+  case value <= 7:
+    return mod + -2;
+  case value <= 9:
+    return mod + -1;
+  case value <= 11:
+    return mod + 0;
+  case value <= 13:
+    return mod + 1;
+  case value <= 15:
+    return mod + 2;
+  case value <= 17:
+    return mod + 3;
+  case value <= 19:
+    return mod + 4;
+  case value <= 21:
+    return mod + 5;
+  case value <= 23:
+    return mod + 6;
+  case value <= 25:
+    return mod + 7;
+  case value <= 27:
+    return mod + 8;
+  case value <= 29:
+    return mod + 9;
+  case value >= 30:
+    return mod + 10;
   }
-  return "no value";
+  return mod;
 };
 
 // Character Backstory/ History Generator
@@ -371,11 +374,9 @@ const getPronouns = (character) => {
 
 const hexBytesToSHA256 = (hexString) => {
   const cleanHex = hexString.replace(/[^0-9a-fA-F]/g, '');
-  const buffer = Buffer.from(cleanHex, 'hex');
 
-  const hash = crypto.createHash('sha256');
-  hash.update(buffer);
-  return hash.digest('hex');
+  const hash = sha3_256(cleanHex).slice(-64)
+  return hash;
 }
 
 const sum = (arr) => {
@@ -403,6 +404,32 @@ const sumStr = (arr) => {
   );
 }
 
+const splitIfEndsWith = (input, endings) => {
+  for (const ending of endings) {
+    if (input.endsWith(ending)) {
+      return [input.slice(0, -ending.length), ending];
+    }
+  }
+  return [];
+}
+
+const KEY = crypto.createHash("sha256").update("rainbowcreation").digest().slice(0, 16); // 16-byte key
+const IV = Buffer.alloc(16, 0); // Fixed 16-byte IV (zeroed out)
+
+function encrypt(name) {
+    const cipher = crypto.createCipheriv('aes-128-cbc', KEY, IV);
+    let encrypted = cipher.update(name, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted; // Return full hex string (32 chars)
+}
+
+function decrypt(hexStr) {
+    const decipher = crypto.createDecipheriv('aes-128-cbc', KEY, IV);
+    let decrypted = decipher.update(hexStr, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+}
+
 module.exports = {
   reroll,
   writeCharacter,
@@ -422,4 +449,7 @@ module.exports = {
   sum,
   sumNum,
   sumStr,
+  encrypt,
+  decrypt,
+  splitIfEndsWith,
 };
