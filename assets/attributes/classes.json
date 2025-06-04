@@ -1,100 +1,140 @@
 [
     {
-        "human": {
-            "common": [
-                {
-                    "class": "knight",
-                    "name": "Knight",
-                    "chance": 2,
-                    "proficiencies": {
-                        "armor": [
-                            "medium",
-                            "heavy",
-                            "shield"
-                        ],
-                        "weapon": [
-                            "simple_weapon",
-                            "martial_weapon"
-                        ],
-                        "saving_throw": [
-                            "str",
-                            "con"
-                        ],
-                        "skills": {
-                            "free": 2,
-                            "choices": [
-                                "animal_handling",
-                                "athletics",
-                                "history",
-                                "insight",
-                                "intimidation", 
-                                "performance", 
-                                "persuasion",
-                                "religion"
-                            ]
-                        },
-                        "stats": {
-                            "hp": {
-                                "base": 10,
-                                "increase_per_level": {
-                                    "roll": 1,
-                                    "min": 1,
-                                    "max": 10,
-                                    "multiplier": 1
-                                }
-                            }
-                        },
-                        "equipments": {
-                            "headgear_upper": "",
-                            "headgear_middle": "",
-                            "headgear_lower": "",
-                            "armor": [
-                                {
-                                    "armor": "chain_mail",
-                                    "chance": 50
-                                },
-                                {
-                                    "armor": "half_plate",
-                                    "chance": 50
-                                }
-                            ],
-                            "garment": "",
-                            "hand_left": "shield",
-                            "hand_right": "long_sword",
-                            "accessory_1": "",
-                            "accessory_2": ""
-                        },
-                        "inventory": {
-                            "guarantee": {
-                                "explorer_pack": 1
-                            },
-                            "roll": [
-                                [
-                                    {
-                                        "chance": 50,
-                                        "container": {
-                                            "lance": 1
-                                        }
-                                    },
-                                    {
-                                        "chance": 50,
-                                        "container": {
-                                            "crossbow": 1,
-                                            "bolt": 20
-                                        }
-                                    }
-                                ]
-                            ]
-                        },
-                        "money": {
-                            "roll": 5,
-                            "min": 1,
-                            "max": 6,
-                            "multiplier": 5
-                        }
-                    }
-                }
-            ]
-        }
+        "rarity": 1,
+        "male": [
+            {
+                "class": "miner",
+                "chance": 10
+            },
+            {
+                "class": "woodcuter",
+                "chance": 10
+            },
+            {
+                "class": "builder",
+                "chance": 5
+            },
+            {
+                "class": "stone_worker",
+                "chance": 5
+            }
+        ],
+        "female": [
+            {
+                "class": "herbalist",
+                "chance": 5
+            }
+        ],
+        "all": [
+            {
+                "class": "villager",
+                "chance": 50
+            },
+            {
+                "class": "farmer",
+                "chance": 10
+            },
+            {
+                "class": "rancher",
+                "chance": 10
+            },
+            {
+                "class": "cook",
+                "chance": 5
+            },
+            {
+                "class": "fisher",
+                "chance": 5
+            },
+            {
+                "class": "animal_hunter",
+                "chance": 5
+            },
+            {
+                "class": "tanner",
+                "chance": 5
+            }
+        ]
+    },
+    {
+        "rarity": 2,
+        "male": [
+            {
+                "class": "miner",
+                "chance": 50
+            },
+            {
+                "class": "woodcuter",
+                "chance": 50
+            },
+            {
+                "class": "builder",
+                "chance": 10
+            },
+            {
+                "class": "stone_worker",
+                "chance": 10
+            },
+            {
+                "class": "blacksmith",
+                "chance": 5
+            }
+        ],
+        "female": [
+            {
+                "class": "herbalist",
+                "chance": 10
+            },
+            {
+                "class": "librarian",
+                "chance": 5
+            }
+        ],
+        "all": [
+            {
+                "class": "farmer",
+                "chance": 50
+            },
+            {
+                "class": "rancher",
+                "chance": 50
+            },
+            {
+                "class": "fisher",
+                "chance": 10
+            },
+            {
+                "class": "animal_hunter",
+                "chance": 10
+            },
+            {
+                "class": "tanner",
+                "chance": 10
+            },
+            {
+                "class": "cook",
+                "chance": 10
+            },
+            {
+                "class": "doctor",
+                "chance": 5
+            },
+            {
+                "class": "chef",
+                "chance": 5
+            },
+            {
+                "class": "catrographer",
+                "chance": 5
+            },
+            {
+                "class": "jeweler",
+                "chance": 5
+            },
+            {
+                "class": "novic_merchant",
+                "chance": 5
+            }
+        ]
     }
 ]

@@ -21,6 +21,7 @@ const offlineFemaleFirstNames = require("../../assets/attributes/firstNameFemale
 const lastNames = require("../../assets/attributes/LastName.json");
 const sex = require("../../assets/attributes/sex.json");
 const classes = require("../../assets/attributes/classes.json");
+const races = require("../../assets/attributes/races.json");
 const backgroundInfo = require("../../assets/attributes/background.json");
 const rarityInfo = require("../../assets/attributes/rarity.json");
 
@@ -47,9 +48,20 @@ const generateRandom = async (seed = '', familyname = '') => {
     }
   }
   else {
-    let tmp = seed;
-    seed = tmp.slice(0,64);
-    familyname = utils.decrypt(tmp.slice(64,96));
+    if (seed.length != 96) {
+      if (seed.length != 64) {
+        seed = sha3_256(seed).slice(-64);
+      }
+      lastRand.v = sha3_256(seed).slice(-64);
+      if (familyname == '') {
+        familyname = lastNames[Math.floor(utils.getRand(lastRand, 0, lastNames.length, false))];
+      }
+    }
+    else {
+      let tmp = seed;
+      seed = tmp.slice(0,64);
+      familyname = utils.decrypt(tmp.slice(64,96));
+    }
   }
 
   lastRand.a = seed;
@@ -59,14 +71,18 @@ const generateRandom = async (seed = '', familyname = '') => {
   }
   lastRand.s = seed+utils.encrypt(familyname);
 
-  lastRand.v = sha3_256(seed).slice(-64); // reset hash seed roll
+  lastRand.v = sha3_256(lastRand.s).slice(-64); // reset hash seed roll
   lastRand.r = rarityInfo[utils.rand(lastRand, rarityInfo)];
 
+  // begin character generation
+  const raceList = utils.getObject(races, lastRand.r.rarity);
+  const raceVal = raceList[Math.floor(utils.rand(lastRand, raceList))];
   var sexVal = sex[Math.floor(utils.getRand(lastRand, 0, sex.length))];
+  const classList = utils.getObject(classes, lastRand.r.rarity, sexVal);
   var classVal =
-    classes[Math.floor(utils.getRand(lastRand, 0, classes.length))];
+    classList[Math.floor(utils.rand(lastRand, classList))];
 
-  if (sexVal === "Male") {
+  if (sexVal === "male") {
     var maleData = maleFirstNames();
     var name =
       maleData[
@@ -82,44 +98,8 @@ const generateRandom = async (seed = '', familyname = '') => {
       " " + lastRand.f.f;   
   }
 
-  var con = utils.rollStat(lastRand);
-
-  var hair = hairInfo[utils.rand(lastRand, hairInfo)];
-  var body = bodyInfo[Math.floor(utils.getRand(lastRand.f, 0, bodyInfo.length))];
-
-  var height = utils.getHeight(body.race, lastRand);
-  height = height + "cm (" + utils.toFeet(height) + ")";
-
-  var weight = 0;
-
-  var chest = chestInfo[utils.rand(lastRand, chestInfo)];
-  var leg = legInfo[utils.rand(lastRand, legInfo)];
-  if (sexVal === "Male") {
-    var facialHair = facialHairInfo[utils.rand(lastRand, facialHairInfo)];
-  } else {
-    var facialHair = facialHairInfo[0];
-  }
-
-  // Weapon Selection
-  if (classVal === "Ranger") {
-    var weapon = bowsInfo[utils.rand(lastRand, bowsInfo)];
-  } else if (classVal === "Rogue") {
-    var weapon = daggersInfo[utils.rand(lastRand, daggersInfo)];
-  } else if (classVal === "Wizard" || classVal == "Cleric") {
-    var weapon = staffsInfo[utils.rand(lastRand, staffsInfo)];
-  } else if (classVal === "Knight" || classVal == "Barbarian") {
-    var weapon = swordsInfo[utils.rand(lastRand, swordsInfo)];
-  }
-  weapon.modifier = Math.floor(utils.getRand(lastRand, 1, 6));
-
-  var ac = 10 + chest.armor + leg.armor + hair.armor;
-
-  /*
-  const stats = ["STR ", "DEX ", "CON ", "INT ", "WIS ", "CHA "];
-  var statMod = stats[Math.floor(utils.getRand(lastRand, 0, stats.length))];
-  var statModVal = Math.floor(utils.getRand(lastRand, 1, 5));
-  */
-
+  var hp = -1;
+  var ac = -1;
   var buff = -1 // todo blessing & curse buff
 
   // Write Character Data
@@ -128,105 +108,36 @@ const generateRandom = async (seed = '', familyname = '') => {
     rarity: lastRand.r,
     name: name,
     sex: sexVal,
-    race: body.race, // race
+    race: raceVal, // race
     class: classVal,
     background: backgroundInfo[utils.rand(lastRand, backgroundInfo)],
     description: "",
-    physical: {
-      height: height,
-      weight: weight,
-      body: body,
-      eyes: eyeInfo[utils.rand(lastRand, eyeInfo)],
-      hair: hair,
-      chest: chest,
-      legs: leg,
-      facialHair: facialHair,
-    },
     coins: Math.floor(utils.getRand(lastRand, 0, 1000)),
-    weapon: weapon,
     buff: buff,
     attributes: {
-      hp: utils.getHP(classVal, con, lastRand),
+      hp: hp,
       ac: ac,
     },
-    parent: [],
+    parents: [],
     children: [],
     stats: {
-      total: 0,
-      str: 0,
-      dex: 0,
-      con: 0,
-      int: 0,
-      wis: 0,
-      cha: 0,
-      base: {
-        total: 0,
-        str: utils.rollStat(lastRand),
-        dex: utils.rollStat(lastRand),
-        con: utils.rollStat(lastRand),
-        int: utils.rollStat(lastRand),
-        wis: utils.rollStat(lastRand),
-        cha: utils.rollStat(lastRand),
-      },
-      modifier: {
-        total: "",
-        str: "",
-        dex: "",
-        con: "",
-        int: "",
-        wis: "",
-        cha: "",
-      },
-      gear: {
-        total: 0,
-        str: 0,
-        dex: 0,
-        con: 0,
-        int: 0,
-        wis: 0,
-        cha: 0,
-      },
-      buff: {
-        total: 0,
-        str: 0,
-        dex: 0,
-        con: 0,
-        int: 0,
-        wis: 0,
-        cha: 0,
-      },
+      total: -1,
+      str: utils.rollStat(lastRand),
+      dex: utils.rollStat(lastRand),
+      con: utils.rollStat(lastRand),
+      int: utils.rollStat(lastRand),
+      wis: utils.rollStat(lastRand),
+      cha: utils.rollStat(lastRand),
     },
   };
 
-  characterData.stats.base.total = utils.sumNum([
-    characterData.stats.base.str,
-    characterData.stats.base.dex,
-    characterData.stats.base.con,
-    characterData.stats.base.int,
-    characterData.stats.base.wis,
-    characterData.stats.base.cha,
-  ]);
-
-  characterData.stats.modifier.str = utils.getAbilityModifier(lastRand, characterData.stats.base.str);
-  characterData.stats.modifier.dex = utils.getAbilityModifier(lastRand, characterData.stats.base.dex);
-  characterData.stats.modifier.con = utils.getAbilityModifier(lastRand, characterData.stats.base.con);
-  characterData.stats.modifier.int = utils.getAbilityModifier(lastRand, characterData.stats.base.int);
-  characterData.stats.modifier.wis = utils.getAbilityModifier(lastRand, characterData.stats.base.wis);
-  characterData.stats.modifier.cha = utils.getAbilityModifier(lastRand, characterData.stats.base.cha);
-
-  characterData.stats.modifier.total = utils.sumNum([
-    characterData.stats.modifier.str,
-    characterData.stats.modifier.dex,
-    characterData.stats.modifier.con,
-    characterData.stats.modifier.int,
-    characterData.stats.modifier.wis,
-    characterData.stats.modifier.cha,
-  ]);
-
   characterData.stats.total = utils.sumNum([
-    characterData.stats.base.total,
-    characterData.stats.gear.total,
-    characterData.stats.buff.total,
+    characterData.stats.str,
+    characterData.stats.dex,
+    characterData.stats.con,
+    characterData.stats.int,
+    characterData.stats.wis,
+    characterData.stats.cha,
   ]);
 
   characterData.description = utils.getBackgroundStory(lastRand, characterData);

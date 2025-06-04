@@ -1,0 +1,58 @@
+{
+    "race": "human",
+    "name": "Human",
+    "adult": 18,
+    "lifespan": 99,
+    "size": "medium",
+    "shape": "humanoid",
+    "sleep": 8,
+    "alignment": {
+        "good": 30,
+        "natural": 40,
+        "bad": 30
+    },
+    "language": {
+        "free": 1,
+        "common": true
+    },
+    "stats": {
+        "speed": 30,
+        "increase_per_level": {
+            "free": 2
+        }
+    },
+    "physical": {
+        "base_height": 147.32,
+        "modify_height": {
+            "roll": 2,
+            "min": 1,
+            "max": 8,
+            "multiplier": 2.54
+        },
+        "height": "base_height+modify_height",
+        "base_weight": 68,
+        "modify_weight": {
+            "roll": 2,
+            "min": 1,
+            "max": 6,
+            "multiplier": 0.45
+        },
+        "weight": "base_weight + (modify_height × modify_weight)"
+    },
+    "proficiencies": {
+        "skills": {
+            "free": 1
+        },
+        "tools": {
+            "free": 1
+        }
+    },
+    "environment_adapt": {
+        "free": 1,
+        "choices": [
+            "tropical",
+            "dry",
+            "polar"
+        ]
+    }
+}

@@ -1,0 +1,98 @@
+{
+    "class": "farmer",
+    "name": "Farmer",
+    "proficiencies": {
+        "armor": [
+            "light"
+        ],
+        "weapon": [
+            "simple_weapon",
+            "farm_implement",
+            "net",
+            "lasso",
+            "whip"
+        ],
+        "tool": [
+            "herbalism_kit"
+        ],
+        "saving_throw": [
+            "str",
+            "con"
+        ],
+        "skills": {
+            "free": 3,
+            "choices": [
+                "athletics", 
+                "animal_handling", 
+                "medicine", 
+                "nature", 
+                "perception", 
+                "survival"
+            ]
+        }
+    },
+    "stats": {
+        "hp": {
+            "base": 10,
+            "increase_per_level": {
+                "roll": 1,
+                "min": 1,
+                "max": 10,
+                "multiplier": 1
+            }
+        }
+    },
+    "equipments": {
+        "headgear_upper": "",
+        "headgear_middle": "",
+        "headgear_lower": "",
+        "armor": [
+            {
+                "armor": "leather_armor",
+                "chance": 50
+            },
+            {
+                "armor": "padded_armor",
+                "chance": 50
+            }
+        ],
+        "garment": "",
+        "hand_left": "",
+        "hand_right": [
+            {
+                "armor": "farm_implement",
+                "chance": 50
+            },
+            {
+                "armor": "simple_weapon",
+                "chance": 50
+            }
+        ],
+        "accessory_1": "",
+        "accessory_2": ""
+    },
+    "inventory": {
+        "roll": [
+            [
+                {
+                    "chance": 50,
+                    "container": {
+                        "explorer_pack": 1
+                    }
+                },
+                {
+                    "chance": 50,
+                    "container": {
+                        "Herbalism Kit": 1
+                    }
+                }
+            ]
+        ]
+    },
+    "money": {
+        "roll": 1,
+        "min": 1,
+        "max": 6,
+        "multiplier": 10
+    }
+}

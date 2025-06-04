@@ -1,50 +1,74 @@
 [
     {
-        "rarity": "Common",
-        "rate": "90%",
-        "statsmod": 0,
-		"chance": 10000000
+        "rarity": 1,
+        "name": "Common",
+        "shortName": "C",
+        "suffix": "[☆]",
+        "rate": "80%",
+        "oneIn": 1,
+		"chance": 800000000000000
     },
     {
-        "rarity": "Uncommon",
-        "rate": "9%",
-        "statsmod": 1,
-		"chance": 1000000
+        "rarity": 2,
+        "name": "Uncommon",
+        "shortName": "UC",
+        "suffix": "[☆☆]",
+        "rate": "10%",
+        "oneIn": 10,
+		"chance": 100000000000000
     },
     {
-        "rarity": "Rare",
-        "rate": "0.9%",
-        "statsmod": 2,
-		"chance": 100000
+        "rarity": 3,
+        "name": "Rare",
+        "shortName": "R",
+        "suffix": "[☆☆☆]",
+        "rate": "6%",
+        "oneIn": 16,
+		"chance": 60000000000000
     },
     {
-        "rarity": "Super Rare (0.09%)",
-        "rate": "0.09%",
-        "statsmod": 3,
-		"chance": 10000
+        "rarity": 4,
+        "name": "Super Rare",
+        "shortName": "SR",
+        "suffix": "[☆☆☆☆]",
+        "rate": "3%",
+        "oneIn": 33,
+		"chance": 30000000000000
     },
     {
-        "rarity": "Super Super Rare",
-        "rate": "0.009%",
-        "statsmod": 4,
-		"chance": 1000
+        "rarity": 5,
+        "name": "Super Super Rare",
+        "shortName": "SSR",
+        "suffix": "[☆☆☆☆]",
+        "rate": "1.5%",
+        "oneIn": 67,
+		"chance": 15000000000000
     },
     {
-        "rarity": "Hyper Rare",
-        "rate": "0.0009%",
-        "statsmod": 5,
-		"chance": 100
+        "rarity": 6,
+        "name": "Ultra Rare",
+        "shortName": "UR",
+        "suffix": "[✶]",
+        "rate": "0.1%",
+        "oneIn": 1000,
+		"chance": 1000000000000
     },
     {
-        "rarity": "Legendary Rare",
-        "rate": "0.00009%",
-        "statsmod": 6,
-		"chance": 10
+        "rarity": 7,
+        "name": "Legendary",
+        "shortName": "L",
+        "suffix": "[✶✶]",
+        "rate": "0.0000001%",
+        "oneIn": 0,
+		"chance": 1000000000
     },
     {
-        "rarity": "Ultra Rare",
-        "rate": "0.000009%",
-        "statsmod": 7,
+        "rarity": 8,
+        "name": "Unique",
+        "shortName": "UQ",
+        "suffix": "[✴]",
+        "rate": "0.0000000000001%",
+        "oneIn": 1000000000000000,
 		"chance": 1
     }
 ]

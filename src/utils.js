@@ -359,12 +359,12 @@ const getBackgroundStory = (seed, character) => {
 
 // Get Pronouns
 const getPronouns = (character) => {
-  if (character.sex === "Male") {
+  if (character.sex === "male") {
     const pronoun1 = "he";
     const pronoun2 = "his";
     const pronoun3 = "him";
     return [pronoun1, pronoun2, pronoun3];
-  } else if (character.sex === "Female") {
+  } else if (character.sex === "female") {
     const pronoun1 = "she";
     const pronoun2 = "her";
     const pronoun3 = "her";
@@ -430,6 +430,30 @@ function decrypt(hexStr) {
     return decrypted;
 }
 
+/**
+ * 
+ * @param {*} object 
+ * @param {*} rarity 
+ * @param {*} race 
+ * @param {*} sex 
+ * @returns json object most of the time are list
+ */
+const getObject = (object, rarity = 1, sex = "") => {
+  if (rarity < 1) {
+    throw `invalid rarity ${rarity}`;
+  }
+  else if (object.length < rarity) {
+    throw `index out of bound ${rarity} of ${object.length}`
+  }
+  var arr = object[rarity-1].all;
+  if (sex != "") {
+    try {
+      arr.push(...object[rarity-1].get(sex));
+    } catch (e){}
+  }
+  return arr;
+}
+
 module.exports = {
   reroll,
   writeCharacter,
@@ -452,4 +476,5 @@ module.exports = {
   encrypt,
   decrypt,
   splitIfEndsWith,
+  getObject
 };

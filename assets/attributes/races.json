@@ -1,6 +1,74 @@
 [
-    "Human",
-    "Elf",
-    "Dwarf",
-    "Halfling"
+    {
+        "rarity": 1,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 2,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 3,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 4,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 5,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 6,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 7,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    },
+    {
+        "rarity": 8,
+        "all": [
+            {
+                "race": "human",
+                "chance": 100
+            }
+        ]
+    }
 ]
