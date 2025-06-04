@@ -2,13 +2,13 @@
   "name": "character-generation-api",
   "version": "1.0.0",
   "description": "Character Generator Project",
-  "main": "server.js",
+  "main": "test.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "start": "node server.js",
-    "watch": "nodemon server.js"
+    "start": "node test.js",
+    "watch": "nodemon test.js"
   },
   "author": "ITsPorky",
   "license": "ISC",

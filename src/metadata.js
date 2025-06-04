@@ -2,6 +2,7 @@ const getMetadata = (id, character) => {
   const metadata = {
     seed: character.seed,
     rarity: character.rarity.name,
+    /*
     name: character.name,
     sex: character.sex,
     race: character.race.race, 
@@ -14,6 +15,7 @@ const getMetadata = (id, character) => {
     stats: character.stats,
     parents: character.parents,
     children: character.children,
+    */
   };
 
   return metadata;

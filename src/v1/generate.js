@@ -5,31 +5,33 @@ const { sha3_256 } = require("js-sha3");
 var maleFirstNames = require( '@stdlib/datasets-male-first-names-en' );
 var femaleFirstNames = require( '@stdlib/datasets-female-first-names-en' );
 
-// Asset Imports
-const bowsInfo = require("../../assets/v1/weapons/bows.json");
-const staffsInfo = require("../../assets/v1/weapons/staffs.json");
-const daggersInfo = require("../../assets/v1/weapons/daggers.json");
-const swordsInfo = require("../../assets/v1/weapons/swords.json");
-const chestInfo = require("../../assets/v1/shirts/chest.json");
-const legInfo = require("../../assets/v1/legs/leg.json");
-const bodyInfo = require("../../assets/v1/body/body.json");
-const eyeInfo = require("../../assets/v1/eyes/eye.json");
-const hairInfo = require("../../assets/v1/hair/hair.json");
-const facialHairInfo = require("../../assets/v1/facial-hair/facial-hair.json");
-const offlineMaleFirstNames = require("../../assets/attributes/firstNameMale.json");
-const offlineFemaleFirstNames = require("../../assets/attributes/firstNameFemale.json");
-const lastNames = require("../../assets/attributes/LastName.json");
+const offlineMaleFirstNames = require("../../assets/attributes/name/firstNameMale.json");
+const offlineFemaleFirstNames = require("../../assets/attributes/name/firstNameFemale.json");
+const lastNames = require("../../assets/attributes/name/lastName.json");
 const sex = require("../../assets/attributes/sex.json");
-const classes = require("../../assets/attributes/classes.json");
-const races = require("../../assets/attributes/races.json");
+const classes = require("../../assets/classes/classes.json");
+const races = require("../../assets/races/races.json");
 const backgroundInfo = require("../../assets/attributes/background.json");
-const rarityInfo = require("../../assets/attributes/rarity.json");
+const rarityInfo = require("../../assets/rarity/rarity.json");
 
 // ******************************************//
 // Generate Methods for Characters/ NPC's
 // ******************************************//
 
-async function getRandomSeed() {
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+async function getRandomSeed(online=true) {
+  if (!online) {
+    return makeid(64);
+  }
   const response = await fetch("https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h");
   const hexString = await response.text();
   const seed = utils.hexBytesToSHA256(hexString);
@@ -41,7 +43,7 @@ const generateRandom = async (seed = '', familyname = '') => {
   // Hash the seed with the SHA256 Algorithm
   let lastRand = {};
   if (seed  == '') {
-    seed = await getRandomSeed();
+    seed = await getRandomSeed(false);
     lastRand.v = sha3_256(seed).slice(-64);
     if (familyname == '') {
       familyname = lastNames[Math.floor(utils.getRand(lastRand, 0, lastNames.length, false))];
@@ -74,13 +76,11 @@ const generateRandom = async (seed = '', familyname = '') => {
   lastRand.v = sha3_256(lastRand.s).slice(-64); // reset hash seed roll
   lastRand.r = rarityInfo[utils.rand(lastRand, rarityInfo)];
 
+  //console.log(`Generating Character with Seed: ${lastRand.s} and Rarity: ${lastRand.r.name}`);
+
   // begin character generation
-  const raceList = utils.getObject(races, lastRand.r.rarity);
-  const raceVal = raceList[Math.floor(utils.rand(lastRand, raceList))];
+  /*
   var sexVal = sex[Math.floor(utils.getRand(lastRand, 0, sex.length))];
-  const classList = utils.getObject(classes, lastRand.r.rarity, sexVal);
-  var classVal =
-    classList[Math.floor(utils.rand(lastRand, classList))];
 
   if (sexVal === "male") {
     var maleData = maleFirstNames();
@@ -98,6 +98,17 @@ const generateRandom = async (seed = '', familyname = '') => {
       " " + lastRand.f.f;   
   }
 
+  const raceList = utils.getObject(races, lastRand.r.rarity);
+  const raceVal = raceList[Math.floor(utils.rand(lastRand, raceList))];
+
+
+  var classVal = '';
+   /*
+  const classList = utils.getObject(classes, lastRand.r.rarity, sexVal);
+  var classVal =
+    classList[Math.floor(utils.rand(lastRand, classList))];
+  */
+ /*
   var hp = -1;
   var ac = -1;
   var buff = -1 // todo blessing & curse buff
@@ -108,10 +119,10 @@ const generateRandom = async (seed = '', familyname = '') => {
     rarity: lastRand.r,
     name: name,
     sex: sexVal,
-    race: raceVal, // race
+    race: raceVal,
     class: classVal,
     background: backgroundInfo[utils.rand(lastRand, backgroundInfo)],
-    description: "",
+    description: 'no description found',
     coins: Math.floor(utils.getRand(lastRand, 0, 1000)),
     buff: buff,
     attributes: {
@@ -140,8 +151,13 @@ const generateRandom = async (seed = '', familyname = '') => {
     characterData.stats.cha,
   ]);
 
-  characterData.description = utils.getBackgroundStory(lastRand, characterData);
+  utils.getBackgroundStory(lastRand, characterData);
+  */
 
+  var characterData = {
+    seed: lastRand.s,
+    rarity: lastRand.r
+  }
   return characterData;
 };
 

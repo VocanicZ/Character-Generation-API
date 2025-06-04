@@ -5,7 +5,7 @@
         "shortName": "C",
         "suffix": "[☆]",
         "rate": "80%",
-        "oneIn": 1,
+        "oneIn": "80 Percent Chance",
 		"chance": 800000000000000
     },
     {
@@ -14,7 +14,7 @@
         "shortName": "UC",
         "suffix": "[☆☆]",
         "rate": "10%",
-        "oneIn": 10,
+        "oneIn": "1 in 10",
 		"chance": 100000000000000
     },
     {
@@ -23,7 +23,7 @@
         "shortName": "R",
         "suffix": "[☆☆☆]",
         "rate": "6%",
-        "oneIn": 16,
+        "oneIn": "1 in 16",
 		"chance": 60000000000000
     },
     {
@@ -32,7 +32,7 @@
         "shortName": "SR",
         "suffix": "[☆☆☆☆]",
         "rate": "3%",
-        "oneIn": 33,
+        "oneIn": "1 in 33",
 		"chance": 30000000000000
     },
     {
@@ -41,7 +41,7 @@
         "shortName": "SSR",
         "suffix": "[☆☆☆☆]",
         "rate": "1.5%",
-        "oneIn": 67,
+        "oneIn": "1 in 67",
 		"chance": 15000000000000
     },
     {
@@ -50,25 +50,43 @@
         "shortName": "UR",
         "suffix": "[✶]",
         "rate": "0.1%",
-        "oneIn": 1000,
+        "oneIn": "i in 1,006",
 		"chance": 1000000000000
     },
     {
         "rarity": 7,
-        "name": "Legendary",
-        "shortName": "L",
+        "name": "Epic",
+        "shortName": "Epic",
         "suffix": "[✶✶]",
-        "rate": "0.0000001%",
-        "oneIn": 0,
-		"chance": 1000000000
+        "rate": "0.005%",
+        "oneIn": "1 in 20,121",
+		"chance": 50000000000
     },
     {
         "rarity": 8,
+        "name": "Legendary",
+        "shortName": "Legendary",
+        "suffix": "[✶✶✶]",
+        "rate": "0.00001%",
+        "oneIn": "1 in 1,006,051",
+		"chance": 1000000000
+    },
+    {
+        "rarity": 9,
+        "name": "Mystic",
+        "shortName": "Mystic",
+        "suffix": "[✶✶✶✶]",
+        "rate": "0.0000001%",
+        "oneIn": "1 in 1,006,051,001",
+		"chance": 1000000
+    },
+    {
+        "rarity": 10,
         "name": "Unique",
-        "shortName": "UQ",
+        "shortName": "UNIQUE",
         "suffix": "[✴]",
         "rate": "0.0000000000001%",
-        "oneIn": 1000000000000000,
+        "oneIn": "i in 1,006,051,001,000,001",
 		"chance": 1
     }
 ]
