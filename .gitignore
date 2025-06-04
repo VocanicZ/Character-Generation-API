@@ -27,4 +27,6 @@ __pypackages__/
 env/
 venv/
 
+*.exe
+
 package-lock.json
